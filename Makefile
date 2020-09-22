@@ -2,7 +2,7 @@ AS := aarch64-none-elf-as
 LD := aarch64-none-elf-ld
 OBJCOPY := aarch64-none-elf-objcopy
 
-AS_FLAGS := -mcpu=cortex-a53
+AS_FLAGS := -mcpu=cortex-a72
 
 SOURCES := $(addprefix src/, boot64.s common.s mailbox.s protocol.s uart.s)
 OBJECTS := $(patsubst src/%.s,target/%.o,$(SOURCES))

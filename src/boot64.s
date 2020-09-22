@@ -39,7 +39,7 @@ next:
   bl toggle_light
 
 wait_for_sync:
-  bl delay_500ms
+  // bl delay_500ms // WTF!!!
   bl toggle_light
   bl draw_banner
   bl check_sync

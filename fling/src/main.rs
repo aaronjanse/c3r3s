@@ -17,7 +17,7 @@ mod serial;
 use serial::Serial;
 
 const DEFAULT_ORIGIN: u32 = 0x80000;
-const DEFAULT_BLOCK_SIZE: u32 = 1024;
+const DEFAULT_BLOCK_SIZE: u32 = 952; //*256;
 
 fn main() {
   let matches = App::new("fling")
@@ -60,7 +60,7 @@ fn main() {
   });
 
   // try not to send more than 100 blocks:
-  let mut block_size = max(DEFAULT_BLOCK_SIZE, (file_size as u32) / 100);
+  let mut block_size = file_size as u32;
   if let Some(block_size_override) = matches.value_of("block_size") {
     block_size = parse_int(block_size_override).unwrap_or_else(|err| {
       error!("Can't parse block size '{}': {}", block_size_override, err);
@@ -138,6 +138,8 @@ fn send_file(serial: &mut Serial, file: &mut File, file_size: u32, block_size: u
   let mut crc = crc32::Crc32::new();
   let mut progress = display::ProgressBar::new(file_size);
 
+  // println!("Initial next_ack: {} (block size: {})", next_ack, block_size);
+
   progress.update(0)?;
   loop {
     let n = file.read(&mut buffer)?;
@@ -153,12 +155,16 @@ fn send_file(serial: &mut Serial, file: &mut File, file_size: u32, block_size: u
 
     count += n as u32;
     progress.update(count)?;
+    // println!("Block sent, expected ack soon: {} (count: {})", next_ack, count);
     while count >= next_ack {
       let ack = serial.read_u32()?;
+      // print!("Ack received: {}", ack);
       if ack != next_ack {
         print!("\n");
         error!("Incorrect ack: expected {}, got {}", next_ack, ack);
         return Err(io::Error::new(io::ErrorKind::InvalidData, "bad ack"));
+      } else {
+        // println!("yay ");
       }
       if ack == file_size {
         serial.write_u32(crc.finish())?;

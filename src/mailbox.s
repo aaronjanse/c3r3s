@@ -6,7 +6,7 @@
   ldp \a, \b, [sp], #16
 .endm
 
-.set MAILBOX_BASE, 0x3f00b880
+.set MAILBOX_BASE, 0xfe00b880
 .set MAILBOX_STATUS_1, 0x38
 .set MAILBOX_RW_0, 0x00
 .set MAILBOX_STATUS_0, 0x18

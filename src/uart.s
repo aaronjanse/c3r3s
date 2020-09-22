@@ -6,8 +6,8 @@
   ldp \a, \b, [sp], #16
 .endm
 
-.set GPIO_BASE, 0x3f200000
-.set UART_BASE, 0x3f201000
+.set GPIO_BASE, 0xfe200000
+.set UART_BASE, 0xfe201000
 
 // uart registers:
 .set DR, 0
@@ -57,7 +57,8 @@ uart_init:
   mov w4, w0, lsr #6
 
   // shut off the uart
-  ldr w3, =UART_BASE
+
+  ldr w3, =0xfe201000
   str wzr, [x3, #CR]
 
   // configure the RX/TX pins so they're not attached to the pulldown
@@ -95,6 +96,7 @@ uart_init:
 .global uart_write
 uart_write:
   dmb sy
+
   ldr w2, =UART_BASE
 1:
   ldr w1, [x2, #FR]

@@ -7,7 +7,7 @@
  *   - x31 = SP
  */
 
-.set TIMER_LO, 0x3f003004
+.set TIMER_LO, 0xfe003004
 
 // arbitrary "100 cycles" (destroys ip1), then add a memory barrier
 .global delay_small

@@ -55,7 +55,7 @@ banner2:
   .ascii "r3s "
 
 spinner:
-  .ascii "/-\\|"
+  .ascii "/|\\-"
 spinner_end:
 
 spinner_index:
